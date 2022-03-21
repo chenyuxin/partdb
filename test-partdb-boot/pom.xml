@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+	<groupId>org.springframework.boot</groupId> 
+    <artifactId>spring-boot-starter-parent</artifactId> 
+    <version>2.6.4</version> 
+    <relativePath></relativePath>
+  </parent>
+	
+  <groupId>com.wondersgroup.partdb</groupId>		
+  <artifactId>test-partdb-boot</artifactId>
+  <version>0.0.1</version>
+  <packaging>jar</packaging>
+  
+  <name>test-partdb-boot</name>
+  <url>http://maven.apache.org</url>
+  
+  <description>测试springboot。</description>
+  
+  <properties>
+    <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+    <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+    
+    <commonUtil.version>2.1</commonUtil.version>
+  </properties>
+  
+  <dependencies>
+	<dependency>
+	   <groupId>org.springframework.boot</groupId>
+	   <artifactId>spring-boot-devtools</artifactId>
+	   <optional>true</optional>
+	   <scope>runtime</scope>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-test</artifactId>
+		<scope>test</scope>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+	
+	<!-- jsp页面需要在springboot导入此包 
+	-->
+	<dependency>
+		<groupId>org.apache.tomcat.embed</groupId>
+		<artifactId>tomcat-embed-jasper</artifactId>
+	</dependency>
+	
+	<dependency>
+		<groupId>com.wondersgroup.common</groupId>
+		<artifactId>common-dao</artifactId>
+		<version>${commonUtil.version}</version>
+	</dependency>
+	
+	
+	<dependency>
+		<groupId>com.wondersgroup.common</groupId>
+		<artifactId>common-util-cipher</artifactId>
+		<version>${commonUtil.version}</version>
+	</dependency>
+	
+  </dependencies>
+  
+  
+</project>

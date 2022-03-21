@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.wondersgroup.partdb</groupId>
+  <artifactId>partdb</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
+  <name>partdb</name>
+  <url>http://maven.apache.org</url>
+  
+  <description>分片数据库，解决大数据量吞吐</description>
+  
+  <modules>
+  	<module>test-transactional</module>
+  </modules>
+  
+  <properties>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<java.version>1.8</java.version>
+	
+	<junit.version>5.8.2</junit.version>
+	<partdb.version>0.0.1-SNAPSHOT</partdb.version>
+	<commonUtil.version>2.1</commonUtil.version>
+	<spring.version>5.3.16</spring.version>
+  </properties>
+  
+  <dependencies>
+  	
+	<dependency>
+	    <groupId>org.junit.jupiter</groupId>
+	    <artifactId>junit-jupiter-api</artifactId>
+	    <version>${junit.version}</version>
+	    <scope>test</scope>
+	</dependency>
+	
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>javax.servlet-api</artifactId>
+	    <version>4.0.1</version>
+	    <scope>provided</scope>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-test</artifactId>
+	    <version>${spring.version}</version>
+	    <scope>test</scope>
+	</dependency>
+  
+  </dependencies>
+  
+  <build>
+	<plugins>
+      <plugin>
+	  	<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>3.8.1</version>
+		<configuration>
+	      <source>${java.version}</source>
+	      <target>${java.version}</target>
+		</configuration>
+	  </plugin>
+	  <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>3.3.2</version>
+      </plugin>
+	</plugins>
+  </build>
+  
+  
+</project>
