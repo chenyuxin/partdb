@@ -61,6 +61,12 @@
 		<version>${commonUtil.version}</version>
 	</dependency>
 	
+	<dependency>
+		<groupId>com.wondersgroup.common</groupId>
+		<artifactId>common-util</artifactId>
+		<version>${commonUtil.version}</version>
+	</dependency>
+	
 	
 	<dependency>
 		<groupId>com.wondersgroup.common</groupId>

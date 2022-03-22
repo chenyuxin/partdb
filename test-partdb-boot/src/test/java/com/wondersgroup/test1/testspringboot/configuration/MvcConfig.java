@@ -22,7 +22,7 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.wondersgroup.test1.testspringboot.interceptor.LoginInterceptor;
 
 
-@Configuration
+//@Configuration
 public class MvcConfig implements WebMvcConfigurer {
 	
 	@SuppressWarnings("deprecation")

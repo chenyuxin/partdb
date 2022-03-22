@@ -26,8 +26,8 @@ public class TestController {
 	
 	@RequestMapping("/test2")
 	public String test2() {
-		String aString = commonDao.useTable("create table test1 (id varchar(22),name varchar(128))");
-		System.out.println(aString);
+//		String aString = commonDao.useTable("create table test1 (id varchar(22),name varchar(128))");
+//		System.out.println(aString);
 		return "index-html";
 	}
 	
