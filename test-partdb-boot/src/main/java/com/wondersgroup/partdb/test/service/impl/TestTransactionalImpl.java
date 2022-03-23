@@ -28,16 +28,17 @@ public class TestTransactionalImpl implements TestTransactional {
 		testPo.setName("测试事务1");
 		commonDao.saveObj(testPo);
 		
-		throw new RuntimeException("测试事务抛异常看看回滚");
+		throw new RuntimeException("测试事务抛异常看看回滚1");
 	}
 	
 	
-	@Transactional
+//	@Transactional(transactionManager = "testDataSourceTransactionManager")
+	@Transactional(transactionManager = "TransactionManager")
 	@Override
 	public void TestDoubleTransactional2() {
 		TestPo testPo = new TestPo();
 		try {
-			testPo.setId(CommonUtilUUID.hexToIdbase64(Cipher.MD2.encrypt("123")));
+			testPo.setId(CommonUtilUUID.hexToIdbase64(Cipher.MD5.encrypt("123")));
 			System.out.println(testPo.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -48,7 +49,7 @@ public class TestTransactionalImpl implements TestTransactional {
 		
 		
 		commonDao.saveOrUpdateObj(testPo,"testDataSource");
-		throw new RuntimeException("测试事务抛异常看看回滚");
+		throw new RuntimeException("测试事务抛异常看看回滚2");
 	}
 
 

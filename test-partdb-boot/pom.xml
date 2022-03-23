@@ -74,6 +74,12 @@
 		<version>${commonUtil.version}</version>
 	</dependency>
 	
+	<dependency>
+		<groupId>com.wondersgroup.common</groupId>
+		<artifactId>common-transactional</artifactId>
+		<version>${commonUtil.version}</version>
+	</dependency>
+	
   </dependencies>
   
   

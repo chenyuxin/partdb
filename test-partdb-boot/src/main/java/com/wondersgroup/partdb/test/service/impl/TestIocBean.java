@@ -54,6 +54,8 @@ public class TestIocBean implements TestIocBeanRunTime{
         
         DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager(); //定义一个某个框架平台的TransactionManager，如JDBC、Hibernate
         dataSourceTransactionManager.setDataSource(testDataSource); // 设置数据源
+        
+        
         DefaultTransactionDefinition transDef = new DefaultTransactionDefinition(); // 定义事务属性
         transDef.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED); // 设置传播行为属性
         TransactionStatus status = dataSourceTransactionManager.getTransaction(transDef); // 获得事务状态
