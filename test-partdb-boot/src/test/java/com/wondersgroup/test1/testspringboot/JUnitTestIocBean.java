@@ -50,7 +50,7 @@ public class JUnitTestIocBean {
         
 		
 		
-		testTransactional.TestDoubleTransactional2();
+		testTransactional.TestDoubleTransactional3("testDataSource",DaoUtil.defaultDataSourceName);
 	}
 
 }

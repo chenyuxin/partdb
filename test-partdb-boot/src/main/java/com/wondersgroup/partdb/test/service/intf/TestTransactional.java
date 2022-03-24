@@ -6,4 +6,6 @@ public interface TestTransactional {
 
 	void TestDoubleTransactional2();
 
+	void TestDoubleTransactional3(String... dataSrouceBeanNames);
+
 }
