@@ -14,7 +14,9 @@
   <description>分片数据库，解决大数据量吞吐</description>
   
   <modules>
-  	<module>test-transactional</module>
+  	<module>partdb-viewcontroller</module>
+  	<module>partdb-common</module>
+  	<module>partdb-core</module>
   </modules>
   
   <properties>
@@ -49,7 +51,7 @@
 	    <version>${spring.version}</version>
 	    <scope>test</scope>
 	</dependency>
-  
+	
   </dependencies>
   
   <build>

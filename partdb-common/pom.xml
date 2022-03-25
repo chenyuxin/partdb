@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.wondersgroup.partdb</groupId>
+    <artifactId>partdb</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>partdb-common</artifactId>
+  <name>partdb-common</name>
+  <description>partdb通用包</description>
+  
+  
+  <dependencies>
+	
+	<dependency>
+		<groupId>com.wondersgroup.common</groupId>
+		<artifactId>common-dao</artifactId>
+		<version>${commonUtil.version}</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>com.wondersgroup.common</groupId>
+		<artifactId>common-util</artifactId>
+		<version>${commonUtil.version}</version>
+	</dependency>
+	
+	
+	<dependency>
+		<groupId>com.wondersgroup.common</groupId>
+		<artifactId>common-util-cipher</artifactId>
+		<version>${commonUtil.version}</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>com.wondersgroup.common</groupId>
+		<artifactId>common-transactional</artifactId>
+		<version>${commonUtil.version}</version>
+	</dependency>
+	
+	
+  </dependencies>
+  
+</project>

@@ -72,7 +72,7 @@ public class TestTransactionalImpl implements TestTransactional {
 			commonDao.saveOrUpdateObj(testPo,dataSrouceBeanName);
 		});
 		
-		throw new RuntimeException("测试事务抛异常看看回滚3");
+		//throw new RuntimeException("测试事务抛异常看看回滚3");
 	}
 
 

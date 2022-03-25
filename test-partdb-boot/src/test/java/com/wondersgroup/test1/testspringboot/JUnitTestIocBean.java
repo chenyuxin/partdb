@@ -8,6 +8,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.wondersgroup.common.spring.util.DynamicIocUtilComponent;
+import com.wondersgroup.common.spring.util.MultipleDataSource;
 import com.wondersgroup.commondao.dao.daoutil.DaoUtil;
 import com.wondersgroup.commondao.dao.daoutil.springcfg.SpringConfiguration;
 import com.wondersgroup.commonutil.type.database.DataBaseType;
@@ -21,6 +22,8 @@ public class JUnitTestIocBean {
 	@Autowired ApplicationContext applicationContext;
 	
 	@Autowired DynamicIocUtilComponent dynamicIocUtil;
+	
+	@Autowired MultipleDataSource multipleDataSource;
 	
 	@Autowired TestIocBeanRunTime iocBean;
 	
@@ -52,5 +55,15 @@ public class JUnitTestIocBean {
 		
 		testTransactional.TestDoubleTransactional3("testDataSource",DaoUtil.defaultDataSourceName);
 	}
+	
+	
+	@Test
+	public void test2() {
+		multipleDataSource.registerDataSource("testDataSource", "localhost", 5432, "partdb2", DataBaseType.getCurrentDataBaseType());
+		
+		//testTransactional.TestDoubleTransactional3(null);
+		testTransactional.TestDoubleTransactional3("testDataSource",DaoUtil.defaultDataSourceName);
+	}
+
 
 }
