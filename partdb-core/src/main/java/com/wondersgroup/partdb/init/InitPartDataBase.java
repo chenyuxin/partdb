@@ -26,7 +26,7 @@ public class InitPartDataBase implements InitializingBean  {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Map<String,Object> paramMap = new HashMap<String,Object>();
-		paramMap.put("use", true);
+		paramMap.put("use_config", true);
 		List<PartDataBaseConfig> partDataBaseConfigs = commonDao.selectObj(PartDataBaseConfig.class,paramMap);
 		
 		PartDBConst.partdbs = new String[partDataBaseConfigs.size()];

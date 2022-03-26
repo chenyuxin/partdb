@@ -68,11 +68,11 @@ public class TestTransactionalImpl implements TestTransactional {
 		}
 		testPo.setName("测试事务3");
 		
-		Arrays.stream(dataSrouceBeanNames).forEach(dataSrouceBeanName ->{ 
+		Arrays.stream(dataSrouceBeanNames).parallel().forEach(dataSrouceBeanName ->{ 
 			commonDao.saveOrUpdateObj(testPo,dataSrouceBeanName);
 		});
 		
-		//throw new RuntimeException("测试事务抛异常看看回滚3");
+		throw new RuntimeException("测试事务抛异常看看回滚3");
 	}
 
 

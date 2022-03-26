@@ -39,7 +39,8 @@ public class JUnitTestIocBean {
         	defaultDataSource = (DruidDataSource) applicationContext.getBean(DaoUtil.defaultDataSourceName);
         	//System.out.println(defaultDataSource.getUrl());
         	testDataSource = defaultDataSource.cloneDruidDataSource();
-        	testDataSource.setUrl(DataBaseType.getCurrentDataBaseType().getJdbcUrl("localhost", 5432, "partdb2"));
+        	//testDataSource.setUrl(DataBaseType.getCurrentDataBaseType().getJdbcUrl("localhost", 5432, "partdb2"));
+        	testDataSource.setUrl(DataBaseType.getCurrentDataBaseType().getJdbcUrl("localhost", 3306, "partdb2"));
             //System.out.println(testDataSource.getUrl());
             testDataSource.init();
         } catch (Exception e) {
@@ -59,7 +60,8 @@ public class JUnitTestIocBean {
 	
 	@Test
 	public void test2() {
-		multipleDataSource.registerDataSource("testDataSource", "localhost", 5432, "partdb2", DataBaseType.getCurrentDataBaseType());
+//		multipleDataSource.registerDataSource("testDataSource", "localhost", 5432, "partdb2", DataBaseType.getCurrentDataBaseType());
+		multipleDataSource.registerDataSource("testDataSource", "localhost", 3306, "partdb2", DataBaseType.getCurrentDataBaseType());
 		
 		//testTransactional.TestDoubleTransactional3(null);
 		testTransactional.TestDoubleTransactional3("testDataSource",DaoUtil.defaultDataSourceName);

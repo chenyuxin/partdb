@@ -25,7 +25,7 @@ public class PartDataBaseConfig {
 	/**
 	 * 在用
 	 */
-	private boolean use;
+	private boolean useConfig;
 
 	
 	public String getPartName() {
@@ -52,13 +52,14 @@ public class PartDataBaseConfig {
 		this.port = port;
 	}
 
-	public boolean isUse() {
-		return use;
+	public boolean isUseConfig() {
+		return useConfig;
 	}
 
-	public void setUse(boolean use) {
-		this.use = use;
+	public void setUseConfig(boolean useConfig) {
+		this.useConfig = useConfig;
 	}
+
 	
 	
 	
