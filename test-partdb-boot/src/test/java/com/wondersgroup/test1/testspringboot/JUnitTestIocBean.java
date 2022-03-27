@@ -1,5 +1,7 @@
 package com.wondersgroup.test1.testspringboot;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,6 +67,19 @@ public class JUnitTestIocBean {
 		
 		//testTransactional.TestDoubleTransactional3(null);
 		testTransactional.TestDoubleTransactional3("testDataSource",DaoUtil.defaultDataSourceName);
+	}
+	
+	@Test
+	public void test3() {
+		multipleDataSource.registerDataSource("testDataSource", "localhost", 3306, "partdb2", DataBaseType.getCurrentDataBaseType());
+		
+		testTransactional.TestDoubleTransactional4(new ConcurrentHashMap<>(), "testDataSource",DaoUtil.defaultDataSourceName);
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 

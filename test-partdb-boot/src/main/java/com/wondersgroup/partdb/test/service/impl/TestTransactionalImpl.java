@@ -1,13 +1,17 @@
 package com.wondersgroup.partdb.test.service.impl;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wondersgroup.common.spring.aop.CommonAop;
+import com.wondersgroup.common.spring.transaction.MultipleManagerAsyncTransaction;
 import com.wondersgroup.common.spring.transaction.MultipleManagerTransaction;
+import com.wondersgroup.common.spring.util.thread.AsyncTransactionThread;
+import com.wondersgroup.commondao.dao.daoutil.DaoUtil;
 import com.wondersgroup.commondao.dao.intf.CommonDao;
 import com.wondersgroup.commonutil.CommonUtilUUID;
 import com.wondersgroup.commonutil.cipher.Cipher;
@@ -68,11 +72,34 @@ public class TestTransactionalImpl implements TestTransactional {
 		}
 		testPo.setName("测试事务3");
 		
-		Arrays.stream(dataSrouceBeanNames).parallel().forEach(dataSrouceBeanName ->{ 
+		Arrays.stream(dataSrouceBeanNames).forEach(dataSrouceBeanName ->{ 
 			commonDao.saveOrUpdateObj(testPo,dataSrouceBeanName);
 		});
 		
 		throw new RuntimeException("测试事务抛异常看看回滚3");
+	}
+
+
+	@CommonAop(cuterClass = MultipleManagerAsyncTransaction.class)
+	@Override
+	public void TestDoubleTransactional4(Map<String, AsyncTransactionThread> map,String... dataSrouceBeanNames) {
+		TestPo testPo = new TestPo();
+		try {
+			testPo.setId(CommonUtilUUID.hexToIdbase64(Cipher.MD5.encrypt("123")));
+			System.out.println(testPo.getId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		testPo.setName("测试事务4");
+		
+		//TODO 把map封装成一个多线程事务的传参对象
+		Arrays.stream(dataSrouceBeanNames).parallel().forEach(dataSrouceBeanName ->{ 
+			map.get(dataSrouceBeanName).offer( () -> {
+				return commonDao.saveOrUpdateObj(testPo,dataSrouceBeanName);
+			});
+		});
+		
+		//throw new RuntimeException("测试事务抛异常看看回滚4");
 	}
 
 
