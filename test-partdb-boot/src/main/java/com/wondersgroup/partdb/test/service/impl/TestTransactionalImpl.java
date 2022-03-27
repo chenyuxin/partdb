@@ -11,7 +11,6 @@ import com.wondersgroup.common.spring.aop.CommonAop;
 import com.wondersgroup.common.spring.transaction.MultipleManagerAsyncTransaction;
 import com.wondersgroup.common.spring.transaction.MultipleManagerTransaction;
 import com.wondersgroup.common.spring.util.thread.AsyncTransactionThread;
-import com.wondersgroup.commondao.dao.daoutil.DaoUtil;
 import com.wondersgroup.commondao.dao.intf.CommonDao;
 import com.wondersgroup.commonutil.CommonUtilUUID;
 import com.wondersgroup.commonutil.cipher.Cipher;
@@ -23,7 +22,7 @@ public class TestTransactionalImpl implements TestTransactional {
 
 	@Autowired CommonDao commonDao;
 	
-	@Transactional
+	@Transactional(transactionManager = "dataSourceTransactionManager")
 	@Override
 	public void TestDoubleTransactional1() {
 		TestPo testPo = new TestPo();
@@ -72,9 +71,9 @@ public class TestTransactionalImpl implements TestTransactional {
 		}
 		testPo.setName("测试事务3");
 		
-		Arrays.stream(dataSrouceBeanNames).forEach(dataSrouceBeanName ->{ 
+		for (String dataSrouceBeanName : dataSrouceBeanNames) {
 			commonDao.saveOrUpdateObj(testPo,dataSrouceBeanName);
-		});
+		}
 		
 		throw new RuntimeException("测试事务抛异常看看回滚3");
 	}
