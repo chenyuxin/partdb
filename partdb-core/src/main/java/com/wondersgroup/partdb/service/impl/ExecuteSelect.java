@@ -25,7 +25,6 @@ public class ExecuteSelect implements ExecuteSqlService {
 		// 使用Parser解析生成AST，这里SQLStatement就是AST
 		SQLStatement statement = parser.parseStatement();
 		
-		
 		 // 使用visitor来访问AST
 		SchemaStatVisitor visitor = new SchemaStatVisitor();
         statement.accept(visitor);

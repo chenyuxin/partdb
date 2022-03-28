@@ -1,19 +1,16 @@
 package com.wondersgroup.partdb.test.service.impl;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wondersgroup.common.spring.aop.CommonAop;
 import com.wondersgroup.common.spring.transaction.MultipleManagerAsyncTransaction;
-import com.wondersgroup.common.spring.transaction.MultipleManagerTransaction;
-import com.wondersgroup.common.spring.util.thread.AsyncTransactionThread;
+import com.wondersgroup.common.spring.util.container.TotalTransactionManager;
 import com.wondersgroup.commondao.dao.intf.CommonDao;
 import com.wondersgroup.commonutil.CommonUtilUUID;
 import com.wondersgroup.commonutil.cipher.Cipher;
+import com.wondersgroup.commonutil.constant.StringMeanPool;
 import com.wondersgroup.partdb.test.po.TestPo;
 import com.wondersgroup.partdb.test.service.intf.TestTransactional;
 
@@ -53,35 +50,14 @@ public class TestTransactionalImpl implements TestTransactional {
 		testPo.setName("测试事务2");
 		commonDao.saveObj(testPo);
 		
-		
-		
-		commonDao.saveOrUpdateObj(testPo,"testDataSource");
+		commonDao.saveOrUpdateObj(testPo,"testDataSource");//@Transactional只能管理单个事务,此处执行在抛异常后不会回滚
 		throw new RuntimeException("测试事务抛异常看看回滚2");
 	}
 	
-	@CommonAop(cuterClass = MultipleManagerTransaction.class)
-	@Override
-	public void TestDoubleTransactional3(String... dataSrouceBeanNames) {
-		TestPo testPo = new TestPo();
-		try {
-			testPo.setId(CommonUtilUUID.hexToIdbase64(Cipher.MD5.encrypt("123")));
-			System.out.println(testPo.getId());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		testPo.setName("测试事务3");
-		
-		for (String dataSrouceBeanName : dataSrouceBeanNames) {
-			commonDao.saveOrUpdateObj(testPo,dataSrouceBeanName);
-		}
-		
-		throw new RuntimeException("测试事务抛异常看看回滚3");
-	}
-
 
 	@CommonAop(cuterClass = MultipleManagerAsyncTransaction.class)
 	@Override
-	public void TestDoubleTransactional4(Map<String, AsyncTransactionThread> map,String... dataSrouceBeanNames) {
+	public void TestDoubleTransactional4(TotalTransactionManager totalTransactionManager) {
 		TestPo testPo = new TestPo();
 		try {
 			testPo.setId(CommonUtilUUID.hexToIdbase64(Cipher.MD5.encrypt("123")));
@@ -91,12 +67,21 @@ public class TestTransactionalImpl implements TestTransactional {
 		}
 		testPo.setName("测试事务4");
 		
-		//TODO 把map封装成一个多线程事务的传参对象
-		Arrays.stream(dataSrouceBeanNames).parallel().forEach(dataSrouceBeanName ->{ 
-			map.get(dataSrouceBeanName).offer( () -> {
-				return commonDao.saveOrUpdateObj(testPo,dataSrouceBeanName);
-			});
-		});
+		//Lamda表达式封装成这样的固定格式
+		totalTransactionManager.execute(entrySet -> {entrySet.getValue().offer( () -> {String dataSourceBeanName = entrySet.getKey();
+			
+			String r = commonDao.saveOrUpdateObj(testPo,dataSourceBeanName);
+			if ( r.contains(StringMeanPool.FAILED_MESSAGE) || (r.contains(StringMeanPool.ERROR_MESSAGE)) ) {
+				throw new RuntimeException(r);//抛出异常让总事务回滚
+			}
+			
+			if ("testDataSource".equals(dataSourceBeanName)) {
+				throw new RuntimeException("测试单个数据源抛异常 testDataSource 总事务的回滚情况");
+			}
+			
+			return r;
+			
+		});});
 		
 		//throw new RuntimeException("测试事务抛异常看看回滚4");
 	}
