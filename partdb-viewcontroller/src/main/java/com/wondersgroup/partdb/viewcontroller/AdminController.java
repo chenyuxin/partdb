@@ -13,7 +13,6 @@ public class AdminController {
 	
 	@RequestMapping("/showparts")
 	public String showParts() {
-		System.out.println(1);
 		return "";
 	}
 	

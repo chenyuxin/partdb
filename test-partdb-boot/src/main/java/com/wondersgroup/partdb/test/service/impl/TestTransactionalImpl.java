@@ -61,29 +61,30 @@ public class TestTransactionalImpl implements TestTransactional {
 		TestPo testPo = new TestPo();
 		try {
 			testPo.setId(CommonUtilUUID.hexToIdbase64(Cipher.MD5.encrypt("123")));
-			System.out.println(testPo.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		testPo.setName("测试事务4");
 		
 		//Lamda表达式封装成这样的固定格式
-		totalTransactionManager.execute(entrySet -> {entrySet.getValue().offer( () -> {String dataSourceBeanName = entrySet.getKey();
+		totalTransactionManager.execute(dataSourceBeanName -> {
 			
+			commonDao.saveOrUpdateObj(testPo,dataSourceBeanName);
 			String r = commonDao.saveOrUpdateObj(testPo,dataSourceBeanName);
+//			String r = commonDao.saveObj(testPo,dataSourceBeanName);
 			if ( r.contains(StringMeanPool.FAILED_MESSAGE) || (r.contains(StringMeanPool.ERROR_MESSAGE)) ) {
 				throw new RuntimeException(r);//抛出异常让总事务回滚
 			}
 			
-			if ("testDataSource".equals(dataSourceBeanName)) {
-				throw new RuntimeException("测试单个数据源抛异常 testDataSource 总事务的回滚情况");
-			}
+//			if ("testDataSource".equals(dataSourceBeanName)) {
+//				throw new RuntimeException("测试单个数据源抛异常 testDataSource 总事务的回滚情况");
+//			}
 			
 			return r;
 			
-		});});
+		});
 		
-		//throw new RuntimeException("测试事务抛异常看看回滚4");
+//		throw new RuntimeException("测试事务抛异常看看回滚4");
 	}
 
 
