@@ -69,9 +69,8 @@ public class TestTransactionalImpl implements TestTransactional {
 		//Lamda表达式封装成这样的固定格式
 		totalTransactionManager.execute(dataSourceBeanName -> {
 			
-			commonDao.saveOrUpdateObj(testPo,dataSourceBeanName);
-			String r = commonDao.saveOrUpdateObj(testPo,dataSourceBeanName);
-//			String r = commonDao.saveObj(testPo,dataSourceBeanName);
+//			String r = commonDao.saveOrUpdateObj(testPo,dataSourceBeanName);
+			String r = commonDao.saveObj(testPo,dataSourceBeanName);
 			if ( r.contains(StringMeanPool.FAILED_MESSAGE) || (r.contains(StringMeanPool.ERROR_MESSAGE)) ) {
 				throw new RuntimeException(r);//抛出异常让总事务回滚
 			}
