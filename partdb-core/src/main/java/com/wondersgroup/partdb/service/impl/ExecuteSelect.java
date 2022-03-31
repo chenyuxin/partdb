@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.ast.statement.SQLInsertStatement;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import com.alibaba.druid.sql.parser.Token;
 import com.wondersgroup.common.spring.util.container.TotalTransactionManager;
@@ -41,9 +41,15 @@ public class ExecuteSelect implements ExecuteSqlService {
 				readOnly = true;
 				partDbTransactionBeanName = PartDBConst.selectPartDataBase;
 				log.debug(partDbTransactionBeanName);
+				parser.parseStatement();
+			} else if (Token.INSERT.equals(token)) {
+				SQLInsertStatement statement = (SQLInsertStatement) parser.parseInsert();
+				statement.getTableName();
+				//TODO   SHOW FULL COLUMNS FROM test1; 通过表名获取主键，全部字段信息，计算分表一致性hash
+				
+			} else {
+				parser.parseStatement();
 			}
-			@SuppressWarnings("unused")
-			SQLStatement statement = parser.parseStatement();
 			
 			partDbTransaction = (PartDbTransaction) applicationContext.getBean(partDbTransactionBeanName);
 			
