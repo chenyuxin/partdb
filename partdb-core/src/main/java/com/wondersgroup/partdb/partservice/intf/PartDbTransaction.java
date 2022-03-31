@@ -20,4 +20,6 @@ public interface PartDbTransaction {
 	 */
 	PartDbExeResult<?> execute(String sql,TotalTransactionManager totalTransactionManager,PartDbFeature... partDbFeature);
 	
+	
+	
 }

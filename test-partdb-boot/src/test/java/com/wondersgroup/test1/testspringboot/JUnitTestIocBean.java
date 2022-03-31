@@ -63,7 +63,7 @@ public class JUnitTestIocBean {
 		multipleDataSource.registerDataSource("testDataSource", "localhost", 5432, "partdb2", DataBaseType.getCurrentDataBaseType());
 //		multipleDataSource.registerDataSource("testDataSource", "localhost", 3306, "partdb2", DataBaseType.getCurrentDataBaseType());
 		
-		testTransactional.TestDoubleTransactional4(new TotalTransactionManager(applicationContext,"testDataSource",DaoUtil.defaultDataSourceName));
+		testTransactional.TestDoubleTransactional4(new TotalTransactionManager(false,applicationContext,"testDataSource",DaoUtil.defaultDataSourceName));
 		
 		try {
 			Thread.sleep(2000);

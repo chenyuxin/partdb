@@ -1,6 +1,5 @@
 package com.wondersgroup.partdb.viewcontroller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class AdminController {
 	
 	@RequestMapping("/executesql")
 	@ResponseBody
-	public PartDbExeResult<List<Map<String, Object>>>  executesql(@RequestBody Map<String, Object> map) {
+	public PartDbExeResult<?>  executesql(@RequestBody Map<String, Object> map) {
 		String sql = CommonUtilMap.getValueOfMap(String.class, "sql", map);
 		
 		return executeSql.executeSql(sql);

@@ -1,6 +1,6 @@
 package com.wondersgroup.partdb.common.po.exepo;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * partDb执行结果返回<br>
@@ -22,7 +22,7 @@ public class PartDbExeResult<T> {
 	/**
 	 * 执行状态 true成功 false失败
 	 */
-	private boolean state;
+	//private boolean state;
 	
 	/**
 	 * 原因描述
@@ -55,13 +55,13 @@ public class PartDbExeResult<T> {
 		this.resultDatas = resultDatas;
 	}
 
-	public boolean isState() {
-		return state;
-	}
-
-	public void setState(boolean state) {
-		this.state = state;
-	}
+//	public boolean isState() {
+//		return state;
+//	}
+//
+//	public void setState(boolean state) {
+//		this.state = state;
+//	}
 
 	public String getReason() {
 		return reason;
