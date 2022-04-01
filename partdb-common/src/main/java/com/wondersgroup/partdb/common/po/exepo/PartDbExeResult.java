@@ -20,7 +20,7 @@ public class PartDbExeResult<T> {
 	private T resultDatas;
 	
 	/**
-	 * 执行状态 true成功 false失败
+	 * 执行状态 true完成 false失败
 	 */
 	//private boolean state;
 	
