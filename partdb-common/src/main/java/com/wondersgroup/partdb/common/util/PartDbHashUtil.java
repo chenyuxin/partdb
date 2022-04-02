@@ -15,6 +15,8 @@ public class PartDbHashUtil {
 	 * @return 分片索引数值
 	 */
 	public static int hashDb(String primaryKeyHash, String[] partdbs) {
+		int dbs = partdbs.length;
+		
 		if( partdbs.length < 64 ) {
 			char c = primaryKeyHash.charAt(0);
 			int a = IdCodeConst.idBase64.indexOf(c);

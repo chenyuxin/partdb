@@ -24,6 +24,7 @@ import com.wondersgroup.commonutil.type.format.DateType;
 import com.wondersgroup.partdb.common.po.exepo.PartDbExeResult;
 import com.wondersgroup.partdb.common.po.tablegroup.PartDataBaseTableGroup;
 import com.wondersgroup.partdb.common.util.PartDBConst;
+import com.wondersgroup.partdb.common.util.PartDbHashUtil;
 import com.wondersgroup.partdb.configservice.intf.TableGroupService;
 import com.wondersgroup.partdb.partservice.intf.PartDbTransaction;
 import com.wondersgroup.partdb.service.intf.ExecuteSqlService;
@@ -107,6 +108,7 @@ public class ExecuteSelect implements ExecuteSqlService {
 				
 				String primaryKeyHash = CommonUtilUUID.getUUIDC64(primaryKeyStrings.toString());
 				
+				int partDbIndex = PartDbHashUtil.hashDb(primaryKeyHash,PartDBConst.partdbs);
 				
 			} else {
 				parser.parseStatement();
