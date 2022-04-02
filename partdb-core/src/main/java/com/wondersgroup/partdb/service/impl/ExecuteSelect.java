@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.druid.sql.ast.SQLDataType;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLName;
 import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
@@ -15,6 +16,11 @@ import com.alibaba.druid.sql.ast.statement.SQLInsertStatement.ValuesClause;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import com.alibaba.druid.sql.parser.Token;
 import com.wondersgroup.common.spring.util.container.TotalTransactionManager;
+import com.wondersgroup.commonutil.CommonUtilUUID;
+import com.wondersgroup.commonutil.cipher.Cipher;
+import com.wondersgroup.commonutil.constant.StringPool;
+import com.wondersgroup.commonutil.type.database.DataBaseType;
+import com.wondersgroup.commonutil.type.format.DateType;
 import com.wondersgroup.partdb.common.po.exepo.PartDbExeResult;
 import com.wondersgroup.partdb.common.po.tablegroup.PartDataBaseTableGroup;
 import com.wondersgroup.partdb.common.util.PartDBConst;
@@ -25,7 +31,6 @@ import com.wondersgroup.partdb.service.intf.ExecuteSqlService;
 @Service
 public class ExecuteSelect implements ExecuteSqlService {
 	
-	@SuppressWarnings("unused")
 	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ExecuteSelect.class);
 
 	@Autowired ApplicationContext applicationContext;
@@ -34,8 +39,8 @@ public class ExecuteSelect implements ExecuteSqlService {
 	
 	@Override
 	public PartDbExeResult<?> executeSql(String sql) {
+		long startExectueTime = System.currentTimeMillis();
 		
-		boolean readOnly = false;
 		PartDbTransaction partDbTransaction = null;
 		try {
 			//新建sql分析
@@ -43,12 +48,11 @@ public class ExecuteSelect implements ExecuteSqlService {
 			
 			// 使用Parser解析生成AST，这里SQLStatement就是AST
 			//SQLParserUtils.createSQLStatementParser(sql,);
-			String partDbTransactionBeanName = PartDBConst.updatePartDataBase;
+			String partDbTransactionBeanName = PartDBConst.updatePartDataBase;//执行sql的服务
 			
 			Token token = parser.getExprParser().getLexer().token();
 			if ( Token.SELECT.equals(token) ) {
-				readOnly = true;
-				partDbTransactionBeanName = PartDBConst.selectPartDataBase;
+				partDbTransactionBeanName = PartDBConst.selectPartDataBase;//查询sql的服务
 				log.debug(partDbTransactionBeanName);
 				parser.parseStatement();
 			} else if (Token.INSERT.equals(token)) {
@@ -56,12 +60,10 @@ public class ExecuteSelect implements ExecuteSqlService {
 				SQLName sqlName = statement.getTableName();
 				log.debug(sqlName.getSimpleName());
 				
-				//TODO    通过表名获取主键，全部字段信息，计算分表一致性hash
-				
-				
+				//通过表名获取主键，全部字段信息，计算分表一致性hash
+				StringBuffer primaryKeyStrings = new StringBuffer();
 				PartDataBaseTableGroup partDataBaseTableGroup = tableGroupService.getTableGroup(sqlName.getSimpleName());
 				if (null == partDataBaseTableGroup || partDataBaseTableGroup.isMainTable()) {
-					log.debug("getPrimaryKeySet");
 					List<String> primaryKeys =  tableGroupService.getPrimaryKeys(sqlName.getSimpleName());
 					log.debug(primaryKeys.toString());
 					for (String primaryKey :primaryKeys) {
@@ -69,52 +71,83 @@ public class ExecuteSelect implements ExecuteSqlService {
 						
 						ValuesClause  values =  statement.getValues();
 						SQLExpr value = values.getValues().get(primaryKeyIndex);
-						
-						log.debug("主键的value：" +value.toString());
+						//String a = DateType.getInstance().getFomatValue(value, "yyyy-MM-dd HH:mm:ss");
+						//DateType.getInstance().getParseValue(value, "yyyy-MM-dd HH:mm:ss");
+						SQLDataType sqlDataType = value.computeDataType();
+						log.debug("2主键的sqlDataType：" + sqlDataType.getName());
+						log.debug("主键的value：" + value.toString());
+						String primaryKeysValue = value.toString();
+						if (sqlDataType.getName().equals("date")) {
+							if(DataBaseType.getCurrentDataBaseType() == DataBaseType.POSTGREPSQL) {
+								throw new RuntimeException("POSTGREPSQL内核数据库的日期主键插入请直接使用字符串格式");
+							}
+							int si = primaryKeysValue.indexOf(StringPool.APOSTROPHE)+1;
+							int ei = primaryKeysValue.indexOf(StringPool.APOSTROPHE,si);
+							primaryKeysValue = primaryKeysValue.substring(si, ei);
+						} else if (primaryKeysValue.contains(StringPool.APOSTROPHE)) {
+							primaryKeysValue = primaryKeysValue.substring(1,primaryKeysValue.length()-1);
+							log.debug("char:" + primaryKeysValue);
+						}
+						Date date = DateType.getInstance().getParseValue(primaryKeysValue);
+						if (null != date) {
+							primaryKeysValue = DateType.getInstance().getFomatValue(date, PartDBConst.datePrimaryKey2HashFomat);
+							primaryKeysValue = primaryKeysValue.replaceAll(PartDBConst.six0, StringPool.BLANK);
+						}
+						log.debug("lastPrimaryKeysValue:" + primaryKeysValue);
 						
 						//TODO 主键，全部字段信息，计算分表一致性hash
+						primaryKeyStrings.append(primaryKeysValue);
 					}
 					
-				} else {
 					
+					
+				} else {
+					//TODO 通过外键关联查询出 分组表的主表的主键字段
 				}
+				
+				String primaryKeyHash = CommonUtilUUID.getUUIDC64(primaryKeyStrings.toString());
+				
+				
 			} else {
 				parser.parseStatement();
 			}
 			
 			partDbTransaction = (PartDbTransaction) applicationContext.getBean(partDbTransactionBeanName);
 			
-			 // 使用visitor来访问AST
-//			SchemaStatVisitor visitor = new SchemaStatVisitor();
-//	        statement.accept(visitor);
-//	        
-//	        log.debug("getTables:" + visitor.getTables().keySet() );
-//	        for (Name tabName : visitor.getTables().keySet()) {
-//	        	log.debug("getTableStat:" + visitor.getTableStat(tabName.getName()));
-//	        	if ( Mode.Select. name().equals( visitor.getTableStat(tabName.getName()).toString()) )  {
-//	        		log.debug("Select equals");
-//	        	}
-//			}
-//	        log.debug("getColumns:" + visitor.getColumns() );
-//	        log.debug("OrderByColumns:" + visitor.getOrderByColumns() );
-			
-			
 		} catch (Exception e) {
 			PartDbExeResult<?> partDbExeResult = new PartDbExeResult<>();
-			partDbExeResult.setComplateDate(new Date());
+			partDbExeResult.setCompleteDate(new Date());
 			partDbExeResult.setReason(e.getMessage());
+			partDbExeResult.setUseTime(System.currentTimeMillis() - startExectueTime);
 			return partDbExeResult;
 		}	
 		
-		long startExectueTime = System.currentTimeMillis();
-		
-		PartDbExeResult<?> partDbExeResult = partDbTransaction.execute(sql, new TotalTransactionManager(readOnly,applicationContext,PartDBConst.partdbs));
-        Date complateDate = new Date();
-        partDbExeResult.setComplateDate(complateDate);
-        partDbExeResult.setUseTime(complateDate.getTime() - startExectueTime);
+		PartDbExeResult<?> partDbExeResult = partDbTransaction.execute(sql, new TotalTransactionManager(PartDBConst.partdbs));
+        Date completeDate = new Date();
+        partDbExeResult.setCompleteDate(completeDate);
+        partDbExeResult.setUseTime(completeDate.getTime() - startExectueTime);
         return partDbExeResult;
-		
 		
 	}
 
 }
+
+
+
+
+// 使用visitor来访问AST
+//SchemaStatVisitor visitor = new SchemaStatVisitor();
+//statement.accept(visitor);
+//
+//log.debug("getTables:" + visitor.getTables().keySet() );
+//for (Name tabName : visitor.getTables().keySet()) {
+//	log.debug("getTableStat:" + visitor.getTableStat(tabName.getName()));
+//	if ( Mode.Select. name().equals( visitor.getTableStat(tabName.getName()).toString()) )  {
+//		log.debug("Select equals");
+//	}
+//}
+//log.debug("getColumns:" + visitor.getColumns() );
+//log.debug("OrderByColumns:" + visitor.getOrderByColumns() );
+
+
+

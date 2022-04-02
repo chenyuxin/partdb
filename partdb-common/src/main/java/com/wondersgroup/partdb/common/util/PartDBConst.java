@@ -18,5 +18,15 @@ public class PartDBConst {
 	 * 查询PartDataBase
 	 */
 	public static final String selectPartDataBase = "selectPartDataBase";
+	
+	/**
+	 * 日期类型字段做主键时的hash前格式化
+	 */
+	public static final String datePrimaryKey2HashFomat = "yyyyMMddHHmmss";
+	
+	/**
+	 * 6个0表示的时分秒替换为""
+	 */
+	public static final String six0 = "000000";
 
 }

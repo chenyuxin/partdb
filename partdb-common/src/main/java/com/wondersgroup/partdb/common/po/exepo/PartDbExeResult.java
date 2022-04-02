@@ -37,7 +37,7 @@ public class PartDbExeResult<T> {
 	/**
 	 * 完成日期
 	 */
-	private Date complateDate;
+	private Date completeDate;
 
 	public String getExeId() {
 		return exeId;
@@ -79,12 +79,12 @@ public class PartDbExeResult<T> {
 		this.useTime = useTime;
 	}
 
-	public Date getComplateDate() {
-		return complateDate;
+	public Date getCompleteDate() {
+		return completeDate;
 	}
 
-	public void setComplateDate(Date complateDate) {
-		this.complateDate = complateDate;
+	public void setCompleteDate(Date completeDate) {
+		this.completeDate = completeDate;
 	}
 	
 
