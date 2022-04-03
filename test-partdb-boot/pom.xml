@@ -26,6 +26,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
     
+    <partdb.version>0.0.1-SNAPSHOT</partdb.version>
     <commonUtil.version>2.1</commonUtil.version>
   </properties>
   
@@ -56,28 +57,9 @@
 	</dependency>
 	
 	<dependency>
-		<groupId>com.wondersgroup.common</groupId>
-		<artifactId>common-dao</artifactId>
-		<version>${commonUtil.version}</version>
-	</dependency>
-	
-	<dependency>
-		<groupId>com.wondersgroup.common</groupId>
-		<artifactId>common-util</artifactId>
-		<version>${commonUtil.version}</version>
-	</dependency>
-	
-	
-	<dependency>
-		<groupId>com.wondersgroup.common</groupId>
-		<artifactId>common-util-cipher</artifactId>
-		<version>${commonUtil.version}</version>
-	</dependency>
-	
-	<dependency>
-		<groupId>com.wondersgroup.common</groupId>
-		<artifactId>common-transactional</artifactId>
-		<version>${commonUtil.version}</version>
+		<groupId>com.wondersgroup.partdb</groupId>
+		<artifactId>partdb-core</artifactId>
+		<version>${partdb.version}</version>
 	</dependency>
 	
   </dependencies>

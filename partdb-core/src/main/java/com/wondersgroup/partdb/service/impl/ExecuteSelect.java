@@ -17,7 +17,6 @@ import com.alibaba.druid.sql.parser.SQLStatementParser;
 import com.alibaba.druid.sql.parser.Token;
 import com.wondersgroup.common.spring.util.container.TotalTransactionManager;
 import com.wondersgroup.commonutil.CommonUtilUUID;
-import com.wondersgroup.commonutil.cipher.Cipher;
 import com.wondersgroup.commonutil.constant.StringPool;
 import com.wondersgroup.commonutil.type.database.DataBaseType;
 import com.wondersgroup.commonutil.type.format.DateType;
@@ -42,6 +41,7 @@ public class ExecuteSelect implements ExecuteSqlService {
 	public PartDbExeResult<?> executeSql(String sql) {
 		long startExectueTime = System.currentTimeMillis();
 		
+		String[] useDbs = PartDBConst.partdbs;
 		PartDbTransaction partDbTransaction = null;
 		try {
 			//新建sql分析
@@ -109,6 +109,7 @@ public class ExecuteSelect implements ExecuteSqlService {
 				String primaryKeyHash = CommonUtilUUID.getUUIDC64(primaryKeyStrings.toString());
 				
 				int partDbIndex = PartDbHashUtil.hashDb(primaryKeyHash,PartDBConst.partdbs);
+				useDbs = new String[]{ PartDBConst.partdbs[partDbIndex] };
 				
 			} else {
 				parser.parseStatement();
@@ -124,7 +125,7 @@ public class ExecuteSelect implements ExecuteSqlService {
 			return partDbExeResult;
 		}	
 		
-		PartDbExeResult<?> partDbExeResult = partDbTransaction.execute(sql, new TotalTransactionManager(PartDBConst.partdbs));
+		PartDbExeResult<?> partDbExeResult = partDbTransaction.execute(sql, new TotalTransactionManager(useDbs));
         Date completeDate = new Date();
         partDbExeResult.setCompleteDate(completeDate);
         partDbExeResult.setUseTime(completeDate.getTime() - startExectueTime);

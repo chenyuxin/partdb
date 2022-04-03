@@ -11,7 +11,7 @@ public class PartDataBaseTableGroup {
 	
 	private String tableGroupId;//表分组id,主表id
 	
-	private String schema;//所在数据模块schema
+	private String schemaName;//所在数据模块schema
 	
 	private String tableName;//表名
 	
@@ -33,12 +33,12 @@ public class PartDataBaseTableGroup {
 		this.tableGroupId = tableGroupId;
 	}
 
-	public String getSchema() {
-		return schema;
+	public String getSchemaName() {
+		return schemaName;
 	}
 
-	public void setSchema(String schema) {
-		this.schema = schema;
+	public void setSchemaName(String schemaName) {
+		this.schemaName = schemaName;
 	}
 
 	public String getTableName() {
