@@ -38,6 +38,9 @@ public class PartDbSelectImpl implements PartDbTransaction {
 			r.addAll(r1);
 			return r1;
 		});
+		
+//		Stream<Map<String, Object>> rStream = r.parallelStream();
+//		rStream.
 	
 		PartDbExeResult<List<Map<String,Object>>> partDbExeResult = new PartDbExeResult<>();
 		partDbExeResult.setResultDatas(r);

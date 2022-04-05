@@ -96,7 +96,7 @@ public class ExecuteSelect implements ExecuteSqlService {
 						}
 						log.debug("lastPrimaryKeysValue:" + primaryKeysValue);
 						
-						//TODO 主键，全部字段信息，计算分表一致性hash
+						//主键，计算分表一致性hash
 						primaryKeyStrings.append(primaryKeysValue);
 					}
 					
