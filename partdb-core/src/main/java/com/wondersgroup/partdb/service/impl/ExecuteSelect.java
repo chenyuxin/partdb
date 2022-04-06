@@ -16,6 +16,7 @@ import com.alibaba.druid.sql.ast.statement.SQLInsertStatement.ValuesClause;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import com.alibaba.druid.sql.parser.Token;
 import com.wondersgroup.common.spring.util.container.TotalTransactionManager;
+import com.wondersgroup.commonutil.CommonUtilString;
 import com.wondersgroup.commonutil.CommonUtilUUID;
 import com.wondersgroup.commonutil.constant.StringPool;
 import com.wondersgroup.commonutil.type.database.DataBaseType;
@@ -56,6 +57,10 @@ public class ExecuteSelect implements ExecuteSqlService {
 				partDbTransactionBeanName = PartDBConst.selectPartDataBase;//查询sql的服务
 				log.debug(partDbTransactionBeanName);
 				parser.parseStatement();
+				List<String> paramsKeyNames = CommonUtilString.getParamsKeyNames(sql);
+				for (String paramsKeyName : paramsKeyNames) {
+					log.debug("注释内容paramsKeyName:" + paramsKeyName);
+				}
 			} else if (Token.INSERT.equals(token)) {
 				SQLInsertStatement statement = (SQLInsertStatement) parser.parseInsert();
 				SQLName sqlName = statement.getTableName();
