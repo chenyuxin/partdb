@@ -29,22 +29,10 @@ public class TableGroupServiceImpl implements TableGroupService {
 
 	@Override
 	public List<String> getPrimaryKeys(String tableName) {
-		/**
-		 SHOW FULL COLUMNS FROM test1;
-		 */
-		
-		/**
-		 selectpg_attribute.attname as pk from 
-		pg_constraint  inner join pg_class 
-		on pg_constraint.conrelid = pg_class.oid 
-		inner join pg_attribute on pg_attribute.attrelid = pg_class.oid 
-		and  pg_attribute.attnum = pg_constraint.conkey[1]
-		where pg_class.relname = 'test1' 
-		and pg_constraint.contype='p'
-		 */
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("tableName", tableName);
-		List<String> primaryKeys = commonDao.selectBaseObjs(SelectDataBaseConfigSql.getPrimaryKeySql(tableName,DataBaseType.getCurrentDataBaseType()), String.class, paramMap);
+		List<String> primaryKeys = commonDao.selectBaseObjs(
+				SelectDataBaseConfigSql.getPrimaryKeySql(tableName,DataBaseType.getCurrentDataBaseType()), String.class, paramMap);
 		
 		return primaryKeys;
 	}
