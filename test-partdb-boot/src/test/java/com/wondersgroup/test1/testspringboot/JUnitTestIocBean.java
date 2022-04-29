@@ -65,11 +65,11 @@ public class JUnitTestIocBean {
 		
 		testTransactional.TestDoubleTransactional4(new TotalTransactionManager("testDataSource",DaoUtil.defaultDataSourceName));
 		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 

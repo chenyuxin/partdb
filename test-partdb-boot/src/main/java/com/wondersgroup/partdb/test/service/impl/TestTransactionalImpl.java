@@ -7,10 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wondersgroup.common.spring.aop.CommonAop;
 import com.wondersgroup.common.spring.transaction.MultipleManagerAsyncTransaction;
 import com.wondersgroup.common.spring.util.container.TotalTransactionManager;
+import com.wondersgroup.commondao.dao.daoutil.DaoEnumOptions;
 import com.wondersgroup.commondao.dao.intf.CommonDao;
 import com.wondersgroup.commonutil.CommonUtilUUID;
 import com.wondersgroup.commonutil.cipher.Cipher;
-import com.wondersgroup.commonutil.constant.StringMeanPool;
 import com.wondersgroup.partdb.test.po.TestPo;
 import com.wondersgroup.partdb.test.service.intf.TestTransactional;
 
@@ -36,8 +36,8 @@ public class TestTransactionalImpl implements TestTransactional {
 	}
 	
 	
-//	@Transactional(transactionManager = "testDataSourceTransactionManager")
-	@Transactional(transactionManager = "dataSourceTransactionManager")
+	@Transactional(transactionManager = "testDataSourceTransactionManager")
+//	@Transactional(transactionManager = "dataSourceTransactionManager")
 	@Override
 	public void TestDoubleTransactional2() {
 		TestPo testPo = new TestPo();
@@ -69,11 +69,8 @@ public class TestTransactionalImpl implements TestTransactional {
 		//Lamda表达式封装成这样的固定格式
 		totalTransactionManager.execute(dataSourceBeanName -> {
 			
-//			String r = commonDao.saveOrUpdateObj(testPo,dataSourceBeanName);
-			String r = commonDao.saveObj(testPo,dataSourceBeanName);
-			if ( r.contains(StringMeanPool.FAILED_MESSAGE) || (r.contains(StringMeanPool.ERROR_MESSAGE)) ) {
-				throw new RuntimeException(r);//抛出异常让总事务回滚
-			}
+			String r = commonDao.saveOrUpdateObj(testPo,dataSourceBeanName,DaoEnumOptions.RuntimeException);
+//			String r = commonDao.saveObj(testPo,dataSourceBeanName,DaoEnumOptions.RuntimeException);
 			
 //			if ("testDataSource".equals(dataSourceBeanName)) {
 //				throw new RuntimeException("测试单个数据源抛异常 testDataSource 总事务的回滚情况");
@@ -83,7 +80,33 @@ public class TestTransactionalImpl implements TestTransactional {
 			
 		});
 		
-//		throw new RuntimeException("测试事务抛异常看看回滚4");
+		try {
+			Thread.sleep(13000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		testPo.setId(CommonUtilUUID.getUUID64());
+		
+		totalTransactionManager.execute(dataSourceBeanName -> {
+			
+//			String r = commonDao.saveOrUpdateObj(testPo,dataSourceBeanName,DaoEnumOptions.RuntimeException);
+			String r = commonDao.saveObj(testPo,dataSourceBeanName,DaoEnumOptions.RuntimeException);
+			
+			try {
+				Thread.sleep(15000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+//			if ("testDataSource".equals(dataSourceBeanName)) {
+//				throw new RuntimeException("测试单个数据源抛异常 testDataSource 总事务的回滚情况");
+//			}
+			
+			return r;
+			
+		});
+		
+		throw new RuntimeException("测试事务抛异常看看回滚4");
 	}
 
 
