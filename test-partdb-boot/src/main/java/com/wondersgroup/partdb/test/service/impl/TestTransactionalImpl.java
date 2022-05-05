@@ -98,15 +98,15 @@ public class TestTransactionalImpl implements TestTransactional {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-//			if ("testDataSource".equals(dataSourceBeanName)) {
-//				throw new RuntimeException("测试单个数据源抛异常 testDataSource 总事务的回滚情况");
-//			}
+			if ("testDataSource".equals(dataSourceBeanName)) {
+				throw new RuntimeException("测试单个数据源抛异常 testDataSource 总事务的回滚情况");
+			}
 			
 			return r;
 			
 		});
 		
-		throw new RuntimeException("测试事务抛异常看看回滚4");
+		//throw new RuntimeException("测试事务抛异常看看回滚4");
 	}
 
 

@@ -46,9 +46,10 @@ public class ExecuteSelect implements ExecuteSqlService {
 	        return partDbExeResult;
 		} catch (Exception e) {
 			PartDbExeResult<?> partDbExeResult = new PartDbExeResult<>();
-			partDbExeResult.setCompleteDate(new Date());
+			Date completeDate = new Date();
+			partDbExeResult.setCompleteDate(completeDate);
 			partDbExeResult.setReason(e.getMessage());
-			partDbExeResult.setUseTime(System.currentTimeMillis() - startExectueTime);
+			partDbExeResult.setUseTime(completeDate.getTime() - startExectueTime);
 			return partDbExeResult;
 		}	
 		

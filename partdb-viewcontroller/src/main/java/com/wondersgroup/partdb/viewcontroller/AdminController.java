@@ -18,7 +18,6 @@ import com.wondersgroup.partdb.service.intf.ExecuteSqlService;
 @Controller
 public class AdminController {
 	
-	@SuppressWarnings("unused")
 	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
 	
 	@Autowired ApplicationContext applicationContext;
@@ -43,8 +42,13 @@ public class AdminController {
 		SQLStatementParser parser = new SQLStatementParser(sql);
 		// 使用Parser解析生成AST，这里SQLStatement就是AST
 		Token token = parser.getExprParser().getLexer().token();
-		
-		ExecuteSqlService executeSql = (ExecuteSqlService) applicationContext.getBean(token.name);
+		log.debug(token.name);
+		ExecuteSqlService executeSql;
+		try {
+			executeSql = (ExecuteSqlService) applicationContext.getBean(token.name);
+		} catch (Exception e) {
+			executeSql = (ExecuteSqlService) applicationContext.getBean("OTHER");
+		}
 		
 		return executeSql.executeSql(sql,parser);
 	}
