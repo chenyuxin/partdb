@@ -76,7 +76,9 @@ public class PartDbUtil {
 	}
 	
 	/**
-	 * 获取分片配置属性，从sql语句中
+	 * 获取分片配置属性，从sql语句中<br>
+	 * 分片配置传入方法： Token后面紧紧跟上斜杠（除号）星注释<br>
+	 * <p>"SELECT/* 键值内容 *斜杠（除号）"<p>
 	 * @param sql
 	 * @return
 	 */
@@ -94,4 +96,5 @@ public class PartDbUtil {
 		log.debug(sbBuilder.toString());
 		return JSON.parseObject(sbBuilder.toString(),new TypeReference<Map<String, Object>>(){} );
 	}
+	
 }

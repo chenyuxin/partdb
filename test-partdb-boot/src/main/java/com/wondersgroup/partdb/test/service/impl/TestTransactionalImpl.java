@@ -69,6 +69,12 @@ public class TestTransactionalImpl implements TestTransactional {
 		//Lamda表达式封装成这样的固定格式
 		totalTransactionManager.execute(dataSourceBeanName -> {
 			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			String r = commonDao.saveOrUpdateObj(testPo,dataSourceBeanName,DaoEnumOptions.RuntimeException);
 //			String r = commonDao.saveObj(testPo,dataSourceBeanName,DaoEnumOptions.RuntimeException);
 			
@@ -76,12 +82,18 @@ public class TestTransactionalImpl implements TestTransactional {
 //				throw new RuntimeException("测试单个数据源抛异常 testDataSource 总事务的回滚情况");
 //			}
 			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			return r;
 			
 		});
 		
 		try {
-			Thread.sleep(13000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -90,17 +102,23 @@ public class TestTransactionalImpl implements TestTransactional {
 		
 		totalTransactionManager.execute(dataSourceBeanName -> {
 			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 //			String r = commonDao.saveOrUpdateObj(testPo,dataSourceBeanName,DaoEnumOptions.RuntimeException);
 			String r = commonDao.saveObj(testPo,dataSourceBeanName,DaoEnumOptions.RuntimeException);
 			
 			try {
-				Thread.sleep(15000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if ("testDataSource".equals(dataSourceBeanName)) {
-				throw new RuntimeException("测试单个数据源抛异常 testDataSource 总事务的回滚情况");
-			}
+//			if ("testDataSource".equals(dataSourceBeanName)) {
+//				throw new RuntimeException("测试单个数据源抛异常 testDataSource 总事务的回滚情况");
+//			}
 			
 			return r;
 			

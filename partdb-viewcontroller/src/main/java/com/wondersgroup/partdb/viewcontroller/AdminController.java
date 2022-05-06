@@ -25,6 +25,7 @@ public class AdminController {
 	
 	@RequestMapping("/showparts")
 	public String showParts() {
+		//TODO
 		return "";
 	}
 	
@@ -49,7 +50,6 @@ public class AdminController {
 		} catch (Exception e) {
 			executeSql = (ExecuteSqlService) applicationContext.getBean("OTHER");
 		}
-		
 		return executeSql.executeSql(sql,parser);
 	}
 
