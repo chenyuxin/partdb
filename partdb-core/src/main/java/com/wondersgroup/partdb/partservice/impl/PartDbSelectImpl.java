@@ -60,8 +60,8 @@ public class PartDbSelectImpl implements PartDbTransaction {
 				long convergenceNum = rStream.mapToLong(e -> Long.valueOf(e.get(feature.getCount()).toString()) ).sum();
 				rt.add(r.get(0));
 				rt.get(0).put(feature.getCount(), convergenceNum);
-				partDbExeResult.setResultDatas(rt);
 			}
+			partDbExeResult.setResultDatas(rt);
 		} else {
 			partDbExeResult.setResultDatas(r);
 		}
