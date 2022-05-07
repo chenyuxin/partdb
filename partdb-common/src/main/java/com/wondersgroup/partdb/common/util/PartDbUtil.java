@@ -1,7 +1,6 @@
 package com.wondersgroup.partdb.common.util;
 
 import java.util.Date;
-import java.util.Map;
 
 import com.alibaba.druid.sql.ast.SQLDataType;
 import com.alibaba.druid.sql.ast.SQLExpr;
@@ -11,6 +10,7 @@ import com.wondersgroup.commonutil.CommonUtilString;
 import com.wondersgroup.commonutil.constant.StringPool;
 import com.wondersgroup.commonutil.type.database.DataBaseType;
 import com.wondersgroup.commonutil.type.format.DateType;
+import com.wondersgroup.partdb.common.po.exepo.PartDbFeature;
 
 /**
  * 通用工具
@@ -75,6 +75,7 @@ public class PartDbUtil {
 		return primaryKeysValue;
 	}
 	
+	
 	/**
 	 * 获取分片配置属性，从sql语句中<br>
 	 * 分片配置传入方法： Token后面紧紧跟上斜杠（除号）星注释<br>
@@ -82,7 +83,7 @@ public class PartDbUtil {
 	 * @param sql
 	 * @return
 	 */
-	public static Map<String, Object> getFeatureInSql(String tokenName,String sql) {
+	public static PartDbFeature getFeatureInSql(String tokenName,String sql) {
 		String beginMatching = tokenName.concat("/*");
 		String endMatching = "*/";
 		int begin = sql.toUpperCase().indexOf(beginMatching);
@@ -94,7 +95,7 @@ public class PartDbUtil {
 		sbBuilder.append(sql.substring(begin, end));
 		sbBuilder.append(StringPool.CLOSE_CURLY_BRACE);
 		log.debug(sbBuilder.toString());
-		return JSON.parseObject(sbBuilder.toString(),new TypeReference<Map<String, Object>>(){} );
+		return JSON.parseObject(sbBuilder.toString(),new TypeReference<PartDbFeature>(){} );
 	}
 	
 }

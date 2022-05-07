@@ -11,12 +11,14 @@ import org.springframework.stereotype.Service;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import com.alibaba.druid.sql.visitor.SchemaStatVisitor;
+import com.alibaba.druid.stat.TableStat.Column;
 import com.alibaba.druid.stat.TableStat.Condition;
 import com.alibaba.druid.stat.TableStat.Name;
 import com.wondersgroup.common.spring.util.container.TotalTransactionManager;
 import com.wondersgroup.commonutil.CommonUtilUUID;
 import com.wondersgroup.commonutil.constant.StringPool;
 import com.wondersgroup.partdb.common.po.exepo.PartDbExeResult;
+import com.wondersgroup.partdb.common.po.exepo.PartDbFeature;
 import com.wondersgroup.partdb.common.po.tablegroup.PartDataBaseTableGroup;
 import com.wondersgroup.partdb.common.util.PartDBConst;
 import com.wondersgroup.partdb.common.util.PartDbHashUtil;
@@ -40,7 +42,7 @@ public class ExecuteSelect implements ExecuteSqlService {
 		
 		PartDbTransaction partDbTransaction = null;
 		try {
-			//Map<String, Object> featureMap = PartDbUtil.getFeatureInSql("SELECT", sql);
+			PartDbFeature partDbFeature = PartDbUtil.getFeatureInSql("SELECT", sql);
 			
 			SQLStatement statement = parser.parseSelect();
 			SchemaStatVisitor visitor = new SchemaStatVisitor();
@@ -53,6 +55,11 @@ public class ExecuteSelect implements ExecuteSqlService {
 			StringBuffer primaryKeyStrings = new StringBuffer();
 			PartDataBaseTableGroup partDataBaseTableGroup = tableGroupService.getTableGroup(table);
 			if (null == partDataBaseTableGroup || partDataBaseTableGroup.isMainTable()) {
+				
+				log.debug("分组字段\t\t\t" + visitor.getGroupByColumns());
+				for (Column a :visitor.getGroupByColumns()) {
+					partDbFeature.setGroupBy(a.getName());
+				}
 				
 				List<Condition> conditions = visitor.getConditions();
 				log.debug("条件\t\t\t" + visitor.getConditions());
@@ -81,9 +88,9 @@ public class ExecuteSelect implements ExecuteSqlService {
 			if (primaryKeyStrings.length() > 0) {//有分表字段作为筛选条件
 				String primaryKeyHash = CommonUtilUUID.getUUIDC64(primaryKeyStrings.toString());
 				int partDbIndex = PartDbHashUtil.hashDb(primaryKeyHash,PartDBConst.partdbs);
-				partDbExeResult = partDbTransaction.execute(sql, new TotalTransactionManager(PartDBConst.partdbs[partDbIndex]));
+				partDbExeResult = partDbTransaction.execute(sql, new TotalTransactionManager(PartDBConst.partdbs[partDbIndex]), partDbFeature);
 			} else {
-				partDbExeResult = partDbTransaction.execute(sql, new TotalTransactionManager(PartDBConst.partdbs));
+				partDbExeResult = partDbTransaction.execute(sql, new TotalTransactionManager(PartDBConst.partdbs), partDbFeature);
 			}
 			Date completeDate = new Date();
 			partDbExeResult.setCompleteDate(completeDate);
