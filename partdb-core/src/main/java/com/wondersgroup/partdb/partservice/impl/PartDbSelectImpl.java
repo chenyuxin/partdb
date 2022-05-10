@@ -49,15 +49,15 @@ public class PartDbSelectImpl implements PartDbTransaction {
 		if (null != feature) {
 			Stream<Map<String, Object>> rStream = r.parallelStream();
 			List<Map<String,Object>> rt;
-			if (feature.getGroupBy() != null) {
+			if (feature.getGroupBy() != null) {//包含group by的情况
 				rt = rStream.collect(Collectors.groupingBy(e -> e.get(feature.getGroupBy()))).values().stream().map(d -> {
 					Map<String, Object> sampleData = d.get(0);
-					sampleData.put(feature.getCount(), d.stream().mapToLong(e -> Long.valueOf(e.get(feature.getCount()).toString())).sum());
+					sampleData.put(feature.getCount(), d.stream().mapToLong(e -> Long.valueOf(e.get(feature.getCount()).toString())).sum());//count函数 汇聚数据 当前仅有一个功能
 					return sampleData;
 				}).collect(Collectors.toList());
 			} else {
 				rt = new ArrayList<Map<String,Object>>();
-				long convergenceNum = rStream.mapToLong(e -> Long.valueOf(e.get(feature.getCount()).toString()) ).sum();
+				long convergenceNum = rStream.mapToLong(e -> Long.valueOf(e.get(feature.getCount()).toString()) ).sum();//count函数 汇聚数据 当前仅有一个功能
 				rt.add(r.get(0));
 				rt.get(0).put(feature.getCount(), convergenceNum);
 			}
