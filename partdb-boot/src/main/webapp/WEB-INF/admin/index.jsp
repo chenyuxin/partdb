@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <h2>Hello World! Part Data Base v0.0.1</h2>
 <br>
 <textarea style="width:100%" name="sql" id="sql"  rows="10" placeholder="SQL TEXT"></textarea>
-<button id="button" onclick="executeSql()">执行</button>
+<button id="button">执行</button>
 
 
 

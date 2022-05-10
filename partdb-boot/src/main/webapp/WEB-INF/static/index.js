@@ -13,3 +13,7 @@ function executeSql(){
 	console.log(responseText);
 }
 
+
+document.getElementById("button").onclick = function() {
+ 	executeSql();
+}
