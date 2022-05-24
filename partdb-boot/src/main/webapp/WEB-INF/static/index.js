@@ -4,7 +4,9 @@
  
 import { CommonJs } from './common/common.js';
 
-const url = 'http://localhost:8765/partdb/executesql';
+const url = window.location.protocol + '//' + window.location.host + '/partdb/executesql';
+
+
 
 function executeSql(){
 	let sql = document.getElementById('sql').value;
