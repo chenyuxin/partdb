@@ -22,9 +22,10 @@ import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.alibaba.fastjson.support.config.FastJsonConfig;
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.alibaba.fastjson2.JSONWriter.Feature;
+import com.alibaba.fastjson2.support.config.FastJsonConfig;
+import com.alibaba.fastjson2.support.spring.http.converter.FastJsonHttpMessageConverter;
+import com.wondersgroup.commonutil.baseutil.CharsetUtil;
 
 
 @Configuration
@@ -60,8 +61,11 @@ public class MvcConfig implements WebMvcConfigurer{
         fastJsonHttpMessageConverter.setSupportedMediaTypes(supportedMediaTypes);
 		
 		
-		FastJsonConfig fastJsonConfig = new FastJsonConfig();
-		fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteMapNullValue,SerializerFeature.WriteDateUseDateFormat);
+        FastJsonConfig fastJsonConfig = new FastJsonConfig();
+//		fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteMapNullValue,SerializerFeature.WriteDateUseDateFormat);
+		fastJsonConfig.setCharset(CharsetUtil.CHARSET_UTF_8);
+		fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
+		fastJsonConfig.setWriterFeatures(Feature.WriteMapNullValue);
 		
         // 将配置设置给转换器并添加到HttpMessageConverter转换器列表中
 		fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);

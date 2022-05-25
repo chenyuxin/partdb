@@ -4,8 +4,8 @@ import java.util.Date;
 
 import com.alibaba.druid.sql.ast.SQLDataType;
 import com.alibaba.druid.sql.ast.SQLExpr;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.TypeReference;
 import com.wondersgroup.commonutil.CommonUtilString;
 import com.wondersgroup.commonutil.constant.StringPool;
 import com.wondersgroup.commonutil.type.database.DataBaseType;
