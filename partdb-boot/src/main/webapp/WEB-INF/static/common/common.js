@@ -3,10 +3,7 @@
  */
 class CommonJs {
 	
-	
-	
-	
-	
+	static localUrl = window.location.protocol + '//' + window.location.host ;
 	
 	/**
 	 * @param reqParam 请求参数
@@ -26,7 +23,6 @@ class CommonJs {
 		}
 		return responseData;
 	}	
-	
 	
 	
 }
