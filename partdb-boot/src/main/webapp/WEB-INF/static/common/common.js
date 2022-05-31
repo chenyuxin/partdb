@@ -1,7 +1,7 @@
 /**
  * 通用js
  */
-class CommonJs {
+class CommonUtilJs {
 	
 	static localUrl = window.location.protocol + '//' + window.location.host ;
 	
@@ -27,4 +27,4 @@ class CommonJs {
 	
 }
 
-export { CommonJs }
+export { CommonUtilJs }

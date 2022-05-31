@@ -2,7 +2,7 @@
  * 
  */
  
-import { CommonJs } from './common/common.js';
+import { CommonUtilJs } from './common/common.js';
 
 const url = CommonJs.localUrl + '/partdb/executesql';
 
